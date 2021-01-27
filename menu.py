@@ -11,6 +11,17 @@ def read_from_file(pfile):
         print("List is empty.")
     press_any_key()
     return plist
+
+#menu alternative 2
+def showing_json_data(jfile):
+    print("Showing json data.")
+    jsonstr=str(modules.load_json_list(jfile)).replace("[","[\n").replace("{","\t{").replace("},","},\n").replace("}]","}\n]")
+    print(jsonstr)
+    press_any_key()
+
+#menu alternative 3
+def add_person(plist):
+    
     
 #menu alternative 5
 def save_list(plist,jfile):
@@ -32,14 +43,14 @@ def menu():
     while True:
         print("\nLaboration 2 - GMI2BT - Nils Broberg")
         #menu text
-        print(f"1. Read in [{filecsv}]\n2. Show json-data\n3. Add person\n4. Remove person\n5. Save to json\n6. Exit\n")
+        print(f"1. Read in [{filecsv}]\n2. Show json-data in [{filejson}]\n3. Add person\n4. Remove person\n5. Save to json\n6. Exit\n")
         choice=input_int("Please type in your choice:","Invalid choice! Try again!")
         if choice==1:
             person_csv_list=read_from_file(filecsv)
         elif choice==2:
-            pass
+            showing_json_data(filejson)
         elif choice==3:
-            pass
+            person_csv_list=add_person(person_csv_list)
         elif choice==4:
             pass
         elif choice==5:
