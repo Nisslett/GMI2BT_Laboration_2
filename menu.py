@@ -1,24 +1,41 @@
 import modules
+from common import input_int,error_msg,press_any_key
 
-def input_int(input_text,error_text="Input not an integer! Try again!"):
-    while True:
-        try:
-            value=int(input(input_text))
-        except ValueError:
-            print(error_text)
-            continue
-        print("value="+str(value))
-        return value
-        
+#menu alternative 1
+def read_from_file(pfile):
+    print(f"Fetching list from file [{pfile}]")
+    plist=modules.get_class_list(pfile)
+    if len(plist)>0:
+        print("The list has been fetched.")
+    else:
+        print("List is empty.")
+    press_any_key()
+    return plist
+    
+#menu alternative 5
+def save_list(plist,jfile):
+    if len(plist)==0:
+        error_msg("Can't save file! List is empty!")
+        press_any_key()
+        return
+    print("Saveing list to file.")
+    if modules.save_json_list(plist,jfile):
+        print("List saved.")
+    else:
+        print("Saveing of list failed")
+    press_any_key()
 
 def menu():
+    filecsv="labb2-personer.csv"
+    filejson="person.json"
+    person_csv_list=[]
     while True:
         print("\nLaboration 2 - GMI2BT - Nils Broberg")
         #menu text
-        print("1. Läs in orginal (labb2-person.csv)\n2. Visa json-data\n3. Lätt till person\n4. Ta bort person\n5. Spara fil (json)\n6. Avsluta\n")
+        print(f"1. Read in [{filecsv}]\n2. Show json-data\n3. Add person\n4. Remove person\n5. Save to json\n6. Exit\n")
         choice=input_int("Please type in your choice:","Invalid choice! Try again!")
         if choice==1:
-            pass
+            person_csv_list=read_from_file(filecsv)
         elif choice==2:
             pass
         elif choice==3:
@@ -26,6 +43,6 @@ def menu():
         elif choice==4:
             pass
         elif choice==5:
-            pass
+            save_list(person_csv_list,filejson)
         elif choice==6:
             break
