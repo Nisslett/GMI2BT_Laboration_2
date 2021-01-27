@@ -21,7 +21,23 @@ def showing_json_data(jfile):
 
 #menu alternative 3
 def add_person(plist):
+    print("Adding a person:")
+    firstname=input("Please type in the firstname:")
+    lastname=input("Please type in the lastname:")
+    email=input("Please type in the email:")
+    plist.append({"firstname":firstname,"lastname":lastname,"email":email})
     
+def find_person_menu(plist):
+    while True:
+        print("Search menu. Search for:")
+        print("1. firstname\n2. lastname\n3. email\n4. go back to main menu")
+        choice=input_int("Please type in your choice:","Invalid choice! Try again!")
+        if choice==4:
+            break
+        if choice<1 or choice>4:
+            continue
+        key=
+        modules.find_person(plist,)
     
 #menu alternative 5
 def save_list(plist,jfile):
@@ -50,7 +66,7 @@ def menu():
         elif choice==2:
             showing_json_data(filejson)
         elif choice==3:
-            person_csv_list=add_person(person_csv_list)
+            add_person(person_csv_list)
         elif choice==4:
             pass
         elif choice==5:

@@ -27,7 +27,15 @@ def load_json_list(filename,path="./"):
     try:
         with open(path+filename,"r",encoding="utf-8") as jsonfile:
             newlist=json.loads(jsonfile.read())
-            #newstring=jsonfile.read().replace("[","[\n").replace("{","\t{").replace("},","},\n")
     except:
         error_msg(f"Something went wrong when reading from [{path+filename}]")
     return newlist
+
+def find_person(plist,key,value):     
+    for person in plist:
+        if type(value)=="str":
+            if person[key].lower().find(value.lower())!=-1:
+                return person
+        else:
+            if person[key]==value:
+                return person
