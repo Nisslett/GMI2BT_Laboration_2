@@ -33,7 +33,7 @@ def load_json_list(filename,path="./"):
 
 def find_person(plist,key,value):     
     for person in plist:
-        if type(value)=="str":
+        if type(value) is str:
             if person[key].lower().find(value.lower())!=-1:
                 return person
         else:
