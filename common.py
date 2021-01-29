@@ -1,5 +1,5 @@
 def error_msg(error_text):
-    print(error_text)
+    print("\033[0;31;40m"+error_text+"\033[0;37;40m")
 
 def input_int(input_text,error_text="Input not an integer! Try again!"):
     while True:
@@ -12,3 +12,9 @@ def input_int(input_text,error_text="Input not an integer! Try again!"):
 
 def press_any_key(pak_text="Press any key to continue . . ."):
     input(pak_text)
+
+def is_empty(list):
+    if len(list)==0:
+        return True
+    else:
+        return False

@@ -1,3 +1,4 @@
+from io import FileIO
 from common import error_msg
 from person import Person
 import json
@@ -15,20 +16,24 @@ class Basefile:
     def open(self,mode="r"):
         try:
             self.fp=open(self.get_fullpath(),mode,encoding=self.encodeing)
+            return True
         except FileNotFoundError:
             error_msg(f"File [{self.get_fullpath}] was not found!")
-            self.fp=None
+        except FileExistsError:
+            error_msg(f"File [{self.get_fullpath}] did not exist!")
+        except IOError:
+            error_msg(f"File [{self.get_fullpath}] could be opened!")
+        self.fp=None
+        return False
     def close(self):
         if not self.fp==None:
             self.fp.close()
     
-    
 
 class CSVfile(Basefile):
     def load_dict_list(self):
-        self.open()
-        if self.fp==None:
-            error_msg("Could not open file")
+        
+        if not self.open():
             return
         keys=self.fp.readline().rstrip("\n").split(";")
         Person.change_keylist(keys)
@@ -49,7 +54,8 @@ class Jsonfile(Basefile):
         json.dump(plist,self.fp,indent=4)
         self.close()
     def load_from_json(self):
-        self.open()
+        if not self.open():
+            return
         newlist=json.loads(self.fp.read())
         self.close()
         return newlist
