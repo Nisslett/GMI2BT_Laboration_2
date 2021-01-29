@@ -8,6 +8,7 @@ class Menu:
         self.csvfile = CSVfile("labb2-personer.csv", encodeing="utf-8-sig")
         self.jsonfile = Jsonfile("person.json")
         self.person_list = []
+        #menu texts
         self.main_menu_text = [f"Read in csv file[{self.csvfile.filename}]",
                                "Show List", "Add person", "Remove person", "Find person",
                                f"Save to json [{self.jsonfile.filename}]",
@@ -15,6 +16,8 @@ class Menu:
                                "Exit"]
         self.find_menu_text = ["Username", "Firstname", "Lastname", "Email",
                                "Telephonenumber", "Adress", "Any attribute", "Go back"]
+        self.remove_menu_text = ["Find and remove","Remove from index","Go back"]
+        #repetable strings
         self.invalid_choice = "Invalid choice! Try again!"
         self.type_in_choice = "Please type in your choice:"
 
@@ -59,8 +62,40 @@ class Menu:
         self.person_list.append(
             Person(username, firstname, lastname, email, telephonenumber, adress))
 
-    # menu alternativ 4
+    # menu alternative 4
 
+    def remove_person_menu(self):
+        pass
+        #find person
+        print("Remove menu")
+        self.print_menu_text(self.remove_person_menu)
+        while True:
+            input_int(self.type_in_choice,self.invalid_choice)
+            
+                
+        #list persons if more then one
+        
+        #chose and ask to delete 
+    
+    def find_and_remove_person(self):
+        pass
+        
+    def chose_person_menu(self,plist):
+        print("\nChose the index of the person you wish to remove\n")
+        Menu.print_list(plist,True)
+        print(str(len(plist))+". Go back to menu.")
+        while True:
+            index=input_int(self.type_in_choice,"Invalid Input! Try again!")
+            if 0<index and index<(len(plist)+1):
+                error_msg("Invalid Input! Try again!")
+                continue
+            # this is the goback condition
+            elif index==len(plist):
+                return 
+            break
+        print(f"Removeing {plist[index].firstname} {plist[index].lastname} . . .")
+        self.person_list.remove(plist[index])
+        press_any_key()
     # menu alternative 5
 
     def find_person_menu(self):
@@ -69,7 +104,7 @@ class Menu:
 
     # menu alternative 6
     def save_json_list(self):
-        if has_empty(self.person_list):
+        if is_empty(self.person_list):
             error_msg("Can't save file! List is empty!")
             press_any_key()
             return
@@ -144,7 +179,7 @@ class Menu:
             if self.found_any(person, search):
                 return True
         else:
-            return self.found_index(person, search, choice)
+            return self.found_key(person, search, choice)
 
     def found_any(self, person, search):
         key_list = Person.get_keylist()
@@ -156,7 +191,7 @@ class Menu:
                 return True
         return False
 
-    def found_index(self, person, search, choice):
+    def found_key(self, person, search, choice):
         key_list = Person.get_keylist()
         tmp_dict = Person.to_dict(person)
         if (choice == 5 and not person.has_telephonenumber()) or (choice == 6 and not person.has_adress()):
