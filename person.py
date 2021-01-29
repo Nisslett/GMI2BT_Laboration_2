@@ -16,7 +16,20 @@ class Person:
     def add_adress(self,adress):
         self.adress=adress
     
-    
+    def is_telephonenumber(self):
+        try:
+            self.telephonenumber
+            return True
+        except NameError:
+            return False
+        
+    def is_adress(self):
+        try:
+            self.adress
+            return True
+        except NameError:
+            return False
+        
     #static functions
     @staticmethod
     def change_keylist(keylist):

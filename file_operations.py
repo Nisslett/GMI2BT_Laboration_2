@@ -1,42 +1,63 @@
 from common import error_msg
 from person import Person
+import json
 
-class Json:
-    pass
-
-
-class CSVfile:
-    def __init__(self,filename,path="./",encodeing="utf-8-sig"):
+class Basefile:
+    def __init__(self,filename,path="./",encodeing="utf-8"):
         self.filename=filename
         self.path=path
         self.encodeing=encodeing
+        self.fp=None
     
     def get_fullpath(self):
         return self.path + self.filename
     
     def open(self,mode="r"):
         try:
-            return open(self.get_fullpath(),mode,encoding=self.encodeing)
+            self.fp=open(self.get_fullpath(),mode,encoding=self.encodeing)
         except FileNotFoundError:
             error_msg(f"File [{self.get_fullpath}] was not found!")
-            return None
+            self.fp=None
+    def close(self):
+        if not self.fp==None:
+            self.fp.close()
+    
+    
+
+class CSVfile(Basefile):
+    def load_dict_list(self):
+        self.open()
+        if self.fp==None:
+            error_msg("Could not open file")
+            return
+        keys=self.fp.readline().rstrip("\n").split(";")
+        Person.change_keylist(keys)
+        newlist=[]
+        for line in self.fp:
+            tmp_element_list=line.rstrip("\n").split(";")
+            new_dict={}
+            for i in range(len(keys)):
+                new_dict[keys[i]]=tmp_element_list[i]
+            newlist.append(new_dict)
+        self.close()
+        return newlist
+
+
+class Jsonfile(Basefile):
+    def save_to_json(self,plist):
+        self.open(mode="w")
+        json.dump(plist,self.fp,indent=4)
+        self.close()
+    def load_from_json(self):
+        self.open()
+        newlist=json.loads(self.fp.read())
+        self.close()
+        return newlist
+
+
+
             
-def export_dict_list():
-    file=CSVfile("labb2-personer.csv")
-    csvfile=file.open()
-    if csvfile==None:
-        error_msg("Could not open file")
-        return
-    keys=csvfile.readline().rstrip("\n").split(";")
-    Person.change_keylist(keys)
-    newlist=[]
-    for line in csvfile:
-        tmp_element_list=line.rstrip("\n").split(";")
-        new_dict={}
-        for i in range(len(keys)):
-            new_dict[keys[i]]=tmp_element_list[i]
-        newlist.append(new_dict)
-    return newlist
+
             
             
 
