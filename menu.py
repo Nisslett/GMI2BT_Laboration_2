@@ -81,11 +81,13 @@ class Menu:
                     continue
                 break
             if choice==3:
-                return
+                break
             elif choice==1:
                 self.find_and_remove_person()
+                break
             elif choice==2:
                 self.chose_person_remove_menu(self.person_list)
+                break
             
                 
         #list persons if more then one
@@ -107,14 +109,11 @@ class Menu:
                 print("Going back.")
             return
         print(f"Found {len(found_list)} matches for your search now which one do you want to remove?")
-        #print("Select and index of the person you wish to remove or one of the alternativ at bottom.")
         press_any_key()
-        # Menu.print_list(found_list,True)
-        # print()
         self.remove_sub_menu(found_list)
         
     def remove_sub_menu(self,plist):
-        Menu.print_menu_text(self.remove_sub_menu_text)
+        self.print_menu_text(self.remove_sub_menu_text)
         while True:
             choice=input_int(self.type_in_choice,self.invalid_choice)
             if choice==3:
@@ -144,11 +143,10 @@ class Menu:
             index=input_int(self.type_in_choice,"Invalid Input! Try again!")
             if index==len(plist):
                 return
-            if 0<index or index<(len(plist)):
+            if index<0 or index>(len(plist)):
                 error_msg("Invalid Input! Try again!")
                 continue
             break
-            # this is the goback condition
         print(f"Removeing {plist[index].firstname} {plist[index].lastname} . . .")
         self.person_list.remove(plist[index])
         press_any_key()
@@ -199,10 +197,10 @@ class Menu:
             if index:
                 tmp_string += str(i).ljust(pad[0])
             # adds all of the person data
-            tmp_string += person.username.ljust(pad[0+offset])+person.firstname.ljust(
-                pad[1+offset])+person.lastname.ljust(pad[2+offset])+person.email.ljust(pad[3+offset])
+            tmp_string += person.username.ljust(pad[1])+person.firstname.ljust(
+                pad[2])+person.lastname.ljust(pad[3])+person.email.ljust(pad[4])
             if person.has_telephonenumber():
-                tmp_string += person.telephonenumber.ljust(pad[4+offset])
+                tmp_string += person.telephonenumber.ljust(pad[5])
             if person.has_adress():
                 tmp_string += person.adress
             # prints the formated person entry
