@@ -40,19 +40,18 @@ class Person:
         return dict_entry
 
     def get_current_keylist(self):
-        tmp_list=["username", "firstname", "lastname", "email"]
+        tmp_list = ["username", "firstname", "lastname", "email"]
         if self.has_telephonenumber():
             tmp_list.append("telephonenumber")
         if self.has_address():
             tmp_list.append("address")
         return tmp_list
-    
+
     # static functions
     @staticmethod
     def get_keylist():
         return ["username", "firstname", "lastname", "email", "telephonenumber", "address"]
 
-    
     @staticmethod
     def change_keylist(keylist):
         ckeys = {"Användarnamn": "username", "Förnamn": "firstname",

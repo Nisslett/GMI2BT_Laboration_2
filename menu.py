@@ -8,13 +8,13 @@ class Menu:
         self.csvfile = CSVfile("labb2-personer.csv", encodeing="utf-8-sig")
         self.jsonfile = Jsonfile("person.json")
         self.person_list = []
-        
-        #repetable strings
+
+        # repetable strings
         self.invalid_choice = "Invalid choice! Try again!"
         self.type_in_choice = "Please type in your choice:"
-        self.go_back="Go back"
-        
-        #menu texts
+        self.go_back = "Go back"
+
+        # menu texts
         self.main_menu_text = [f"Read in csv file[{self.csvfile.filename}]",
                                "Show List", "Add person", "Remove person", "Find person",
                                f"Save to json [{self.jsonfile.filename}]",
@@ -22,10 +22,12 @@ class Menu:
                                "Exit"]
         self.find_menu_text = ["Username", "Firstname", "Lastname", "Email",
                                "Telephonenumber", "Address", "Any attribute", self.go_back]
-        self.remove_menu_text = ["Find and remove","Remove from index",self.go_back]
-        self.remove_sub_menu_text=["Remove by index of the items found","Remove all",self.go_back]
-        
-        #starst the menu
+        self.remove_menu_text = ["Find and remove",
+                                 "Remove from index", self.go_back]
+        self.remove_sub_menu_text = [
+            "Remove by index of the items found", "Remove all", self.go_back]
+
+        # starst the menu
         self.start()
 
     def print_menu_text(self, text_list):
@@ -75,27 +77,27 @@ class Menu:
             print("Remove person menu")
             self.print_menu_text(self.remove_menu_text)
             while True:
-                choice=input_int(self.type_in_choice,self.invalid_choice)
-                if choice<1 or choice>3:
+                choice = input_int(self.type_in_choice, self.invalid_choice)
+                if choice < 1 or choice > 3:
                     error_msg(self.invalid_choice)
                     continue
                 break
-            if choice==3:
+            if choice == 3:
                 break
-            elif choice==1:
+            elif choice == 1:
                 self.find_and_remove_person()
                 break
-            elif choice==2:
+            elif choice == 2:
                 self.chose_person_remove_menu(self.person_list)
                 break
 
     def find_and_remove_person(self):
         print("Search for a person or persosns you wish to remove.")
-        found_list=self.find_person()
-        if len(found_list)==0:
+        found_list = self.find_person()
+        if len(found_list) == 0:
             print("There were no resualts from your serach!\nGoing back!")
             return
-        if len(found_list)==1:
+        if len(found_list) == 1:
             print("One match found:")
             Menu.print_list(found_list)
             if prompt_yes_or_no("Do you wish to remove this person?"):
@@ -103,23 +105,24 @@ class Menu:
             else:
                 print("Going back.")
             return
-        print(f"Found {len(found_list)} matches for your search now which one do you want to remove?")
+        print(
+            f"Found {len(found_list)} matches for your search now which one do you want to remove?")
         press_any_key()
         self.remove_sub_menu(found_list)
-        
-    def remove_sub_menu(self,plist):
+
+    def remove_sub_menu(self, plist):
         self.print_menu_text(self.remove_sub_menu_text)
         while True:
-            choice=input_int(self.type_in_choice,self.invalid_choice)
-            if choice==3:
+            choice = input_int(self.type_in_choice, self.invalid_choice)
+            if choice == 3:
                 return
-            if choice<1 or choice>3:
+            if choice < 1 or choice > 3:
                 error_msg(self.invalid_choice)
                 continue
             break
-        if choice==1:
+        if choice == 1:
             self.chose_person_remove_menu(plist)
-        if choice==2:
+        if choice == 2:
             print("These are the matches:")
             Menu.print_list(plist)
             if prompt_yes_or_no("Do you wish to remove all persons that matched?"):
@@ -128,24 +131,24 @@ class Menu:
                     self.person_list.remove(person)
             else:
                 print("Going back.")
-            
-            
-    def chose_person_remove_menu(self,plist):
+
+    def chose_person_remove_menu(self, plist):
         print("\nChose the index of the person you wish to remove\n")
-        Menu.print_list(plist,True)
+        Menu.print_list(plist, True)
         print(str(len(plist))+". Go back")
         while True:
-            index=input_int(self.type_in_choice,"Invalid Input! Try again!")
-            if index==len(plist):
+            index = input_int(self.type_in_choice, "Invalid Input! Try again!")
+            if index == len(plist):
                 return
-            if index<0 or index>(len(plist)):
+            if index < 0 or index > (len(plist)):
                 error_msg("Invalid Input! Try again!")
                 continue
             break
-        print(f"Removeing {plist[index].firstname} {plist[index].lastname} . . .")
+        print(
+            f"Removeing {plist[index].firstname} {plist[index].lastname} . . .")
         self.person_list.remove(plist[index])
         press_any_key()
-        
+
     # menu alternative 5
     def find_person_menu(self):
         Menu.print_list(self.find_person())
