@@ -1,8 +1,5 @@
 from os import error
 
-
-
-
 def error_msg(error_text):
     print("\033[0;31;40m"+error_text+"\033[0;37;40m")
 

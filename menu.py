@@ -21,9 +21,12 @@ class Menu:
                                f"Load from json [{self.jsonfile.filename}]",
                                "Exit"]
         self.find_menu_text = ["Username", "Firstname", "Lastname", "Email",
-                               "Telephonenumber", "Adress", "Any attribute", self.go_back]
+                               "Telephonenumber", "Address", "Any attribute", self.go_back]
         self.remove_menu_text = ["Find and remove","Remove from index",self.go_back]
         self.remove_sub_menu_text=["Remove by index of the items found","Remove all",self.go_back]
+        
+        #starst the menu
+        self.start()
 
     def print_menu_text(self, text_list):
         for i in range(len(text_list)):
@@ -60,17 +63,14 @@ class Menu:
         telephonenumber = input("Please type in the telephonenumber:").strip()
         if telephonenumber == "":
             telephonenumber = None
-        adress = input("Please type in the adress:").strip()
-        if adress == "":
-            adress = None
+        address = input("Please type in the address:").strip()
+        if address == "":
+            address = None
         self.person_list.append(
-            Person(username, firstname, lastname, email, telephonenumber, adress))
+            Person(username, firstname, lastname, email, telephonenumber, address))
 
     # menu alternative 4
-
     def remove_person_menu(self):
-        #find person
-        
         while True:
             print("Remove person menu")
             self.print_menu_text(self.remove_menu_text)
@@ -88,12 +88,7 @@ class Menu:
             elif choice==2:
                 self.chose_person_remove_menu(self.person_list)
                 break
-            
-                
-        #list persons if more then one
-        
-        #chose and ask to delete 
-    #because
+
     def find_and_remove_person(self):
         print("Search for a person or persosns you wish to remove.")
         found_list=self.find_person()
@@ -150,8 +145,8 @@ class Menu:
         print(f"Removeing {plist[index].firstname} {plist[index].lastname} . . .")
         self.person_list.remove(plist[index])
         press_any_key()
+        
     # menu alternative 5
-
     def find_person_menu(self):
         Menu.print_list(self.find_person())
         press_any_key()
@@ -201,8 +196,8 @@ class Menu:
                 pad[2])+person.lastname.ljust(pad[3])+person.email.ljust(pad[4])
             if person.has_telephonenumber():
                 tmp_string += person.telephonenumber.ljust(pad[5])
-            if person.has_adress():
-                tmp_string += person.adress
+            if person.has_address():
+                tmp_string += person.address
             # prints the formated person entry
             print(tmp_string)
 
@@ -246,7 +241,7 @@ class Menu:
     def found_key(self, person, search, choice):
         key_list = Person.get_keylist()
         tmp_dict = Person.to_dict(person)
-        if (choice == 5 and not person.has_telephonenumber()) or (choice == 6 and not person.has_adress()):
+        if (choice == 5 and not person.has_telephonenumber()) or (choice == 6 and not person.has_address()):
             return False
         if not tmp_dict[key_list[choice-1]].lower().find(search) == -1:
             return True

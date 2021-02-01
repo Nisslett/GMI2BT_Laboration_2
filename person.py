@@ -1,20 +1,20 @@
 
 class Person:
-    def __init__(self, username, firstname, lastname, email, telephonenumber=None, adress=None):
+    def __init__(self, username, firstname, lastname, email, telephonenumber=None, address=None):
         self.username = username
         self.firstname = firstname
         self.lastname = lastname
         self.email = email
         if telephonenumber != None:
             self.telephonenumber = telephonenumber
-        if adress != None:
-            self.adress = adress
+        if address != None:
+            self.address = address
 
     def add_telephonenumber(self, number):
         self.telephonenumber = number
 
-    def add_adress(self, adress):
-        self.adress = adress
+    def add_address(self, address):
+        self.address = address
 
     def has_telephonenumber(self):
         try:
@@ -23,9 +23,9 @@ class Person:
         except AttributeError:
             return False
 
-    def has_adress(self):
+    def has_address(self):
         try:
-            self.adress
+            self.address
             return True
         except AttributeError:
             return False
@@ -35,23 +35,24 @@ class Person:
                       "lastname": self.lastname, "email": self.email}
         if self.has_telephonenumber():
             dict_entry["telephonenumber"] = self.telephonenumber
-        if self.has_adress():
-            dict_entry["adress"] = self.adress
+        if self.has_address():
+            dict_entry["address"] = self.address
         return dict_entry
 
     def get_current_keylist(self):
         tmp_list=["username", "firstname", "lastname", "email"]
         if self.has_telephonenumber():
             tmp_list.append("telephonenumber")
-        if self.has_adress():
-            tmp_list.append("adress")
+        if self.has_address():
+            tmp_list.append("address")
         return tmp_list
     
+    # static functions
     @staticmethod
     def get_keylist():
-        return ["username", "firstname", "lastname", "email", "telephonenumber", "adress"]
+        return ["username", "firstname", "lastname", "email", "telephonenumber", "address"]
 
-    # static functions
+    
     @staticmethod
     def change_keylist(keylist):
         ckeys = {"Användarnamn": "username", "Förnamn": "firstname",
@@ -66,8 +67,8 @@ class Person:
                      dict_imp["lastname"], dict_imp["email"])
         if "telephonenumber" in dict_imp.keys():
             per.add_telephonenumber(dict_imp["telephonenumber"])
-        if "adress" in dict_imp.keys():
-            per.add_adress(dict_imp["adress"])
+        if "address" in dict_imp.keys():
+            per.add_address(dict_imp["address"])
         return per
 
     @staticmethod
