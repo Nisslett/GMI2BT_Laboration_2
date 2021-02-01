@@ -39,6 +39,14 @@ class Person:
             dict_entry["adress"] = self.adress
         return dict_entry
 
+    def get_current_keylist(self):
+        tmp_list=["username", "firstname", "lastname", "email"]
+        if self.has_telephonenumber():
+            tmp_list.append("telephonenumber")
+        if self.has_adress():
+            tmp_list.append("adress")
+        return tmp_list
+    
     @staticmethod
     def get_keylist():
         return ["username", "firstname", "lastname", "email", "telephonenumber", "adress"]

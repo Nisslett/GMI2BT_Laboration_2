@@ -31,3 +31,12 @@ def is_empty(list):
         return True
     else:
         return False
+    
+def prompt_yes_or_no(text):
+    while True:
+        answer=input(text+" (yes/no):").lower()
+        if answer=="yes":
+            return True
+        elif answer=="no":
+            return False
+        error_msg("Input must be yes or no! Try again!")

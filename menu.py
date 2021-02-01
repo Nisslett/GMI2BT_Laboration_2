@@ -1,5 +1,5 @@
 from person import Person
-from common import input_int, error_msg, press_any_key, is_empty, input_required
+from common import input_int, error_msg, press_any_key, is_empty, input_required, prompt_yes_or_no
 from file_operations import CSVfile, Jsonfile
 
 
@@ -8,6 +8,12 @@ class Menu:
         self.csvfile = CSVfile("labb2-personer.csv", encodeing="utf-8-sig")
         self.jsonfile = Jsonfile("person.json")
         self.person_list = []
+        
+        #repetable strings
+        self.invalid_choice = "Invalid choice! Try again!"
+        self.type_in_choice = "Please type in your choice:"
+        self.go_back="Go back"
+        
         #menu texts
         self.main_menu_text = [f"Read in csv file[{self.csvfile.filename}]",
                                "Show List", "Add person", "Remove person", "Find person",
@@ -15,11 +21,9 @@ class Menu:
                                f"Load from json [{self.jsonfile.filename}]",
                                "Exit"]
         self.find_menu_text = ["Username", "Firstname", "Lastname", "Email",
-                               "Telephonenumber", "Adress", "Any attribute", "Go back"]
-        self.remove_menu_text = ["Find and remove","Remove from index","Go back"]
-        #repetable strings
-        self.invalid_choice = "Invalid choice! Try again!"
-        self.type_in_choice = "Please type in your choice:"
+                               "Telephonenumber", "Adress", "Any attribute", self.go_back]
+        self.remove_menu_text = ["Find and remove","Remove from index",self.go_back]
+        self.remove_sub_menu_text=["Remove by index of the items found","Remove all",self.go_back]
 
     def print_menu_text(self, text_list):
         for i in range(len(text_list)):
@@ -65,34 +69,86 @@ class Menu:
     # menu alternative 4
 
     def remove_person_menu(self):
-        pass
         #find person
-        print("Remove menu")
-        self.print_menu_text(self.remove_person_menu)
+        
         while True:
-            input_int(self.type_in_choice,self.invalid_choice)
+            print("Remove person menu")
+            self.print_menu_text(self.remove_menu_text)
+            while True:
+                choice=input_int(self.type_in_choice,self.invalid_choice)
+                if choice<1 or choice>3:
+                    error_msg(self.invalid_choice)
+                    continue
+                break
+            if choice==3:
+                return
+            elif choice==1:
+                self.find_and_remove_person()
+            elif choice==2:
+                self.chose_person_remove_menu(self.person_list)
             
                 
         #list persons if more then one
         
         #chose and ask to delete 
-    
+    #because
     def find_and_remove_person(self):
-        pass
+        print("Search for a person or persosns you wish to remove.")
+        found_list=self.find_person()
+        if len(found_list)==0:
+            print("There were no resualts from your serach!\nGoing back!")
+            return
+        if len(found_list)==1:
+            print("One match found:")
+            Menu.print_list(found_list)
+            if prompt_yes_or_no("Do you wish to remove this person?"):
+                self.person_list.remove(found_list[0])
+            else:
+                print("Going back.")
+            return
+        print(f"Found {len(found_list)} matches for your search now which one do you want to remove?")
+        #print("Select and index of the person you wish to remove or one of the alternativ at bottom.")
+        press_any_key()
+        # Menu.print_list(found_list,True)
+        # print()
+        self.remove_sub_menu(found_list)
         
-    def chose_person_menu(self,plist):
+    def remove_sub_menu(self,plist):
+        Menu.print_menu_text(self.remove_sub_menu_text)
+        while True:
+            choice=input_int(self.type_in_choice,self.invalid_choice)
+            if choice==3:
+                return
+            if choice<1 or choice>3:
+                error_msg(self.invalid_choice)
+                continue
+            break
+        if choice==1:
+            self.chose_person_remove_menu(plist)
+        if choice==2:
+            print("These are the matches:")
+            Menu.print_list(plist)
+            if prompt_yes_or_no("Do you wish to remove all persons that matched?"):
+                print("Removeing")
+                for person in plist:
+                    self.person_list.remove(person)
+            else:
+                print("Going back.")
+            
+            
+    def chose_person_remove_menu(self,plist):
         print("\nChose the index of the person you wish to remove\n")
         Menu.print_list(plist,True)
-        print(str(len(plist))+". Go back to menu.")
+        print(str(len(plist))+". Go back")
         while True:
             index=input_int(self.type_in_choice,"Invalid Input! Try again!")
-            if 0<index and index<(len(plist)+1):
+            if index==len(plist):
+                return
+            if 0<index or index<(len(plist)):
                 error_msg("Invalid Input! Try again!")
                 continue
-            # this is the goback condition
-            elif index==len(plist):
-                return 
             break
+            # this is the goback condition
         print(f"Removeing {plist[index].firstname} {plist[index].lastname} . . .")
         self.person_list.remove(plist[index])
         press_any_key()
@@ -182,11 +238,9 @@ class Menu:
             return self.found_key(person, search, choice)
 
     def found_any(self, person, search):
-        key_list = Person.get_keylist()
+        key_list = person.get_current_keylist()
         tmp_dict = Person.to_dict(person)
         for key in key_list:
-            if (key == key_list[4] and not Person.has_telephonenumber(person)) or (key == key_list[5] and not Person.has_adress(person)):
-                continue
             if not tmp_dict[key].lower().find(search) == -1:
                 return True
         return False
@@ -214,8 +268,7 @@ class Menu:
             elif choice == 3:
                 self.add_person()
             elif choice == 4:
-                # remove
-                pass
+                self.remove_person_menu()
             elif choice == 5:
                 self.find_person_menu()
             elif choice == 6:
